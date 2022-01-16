@@ -14,7 +14,11 @@
 #include <errno.h>	// error messages
 #include <string.h>	// string comparing and error formatting
 #include <stdlib.h>     // exit
-#include <unistd.h>	// file closing
+#include <unistd.h>	// file closing and creating child processes.
+#include <pthread.h>    // thread creation and manipulation.
+#include <signal.h>	// signal for treating zombie processes.
+#include <sys/wait.h>	// wait signal for child processes.
+#include <time.h> 	// counting process time.
 
 
 /* ------ Macros ------ */
@@ -32,14 +36,7 @@
 
 #define BACKLOG 10
 
-#define NODE_PORT htons(2024)
+#define START_PORT htons(2029)
 
-#define STATION_1_PORT htons(2025)
+#define STATIONS 5
 
-#define STATION_2_PORT htons(2026)
-
-#define STATION_3_PORT htons(2027)
-
-#define STATION_4_PORT htons(2028)
-
-#define STATION_5_PORT htons(2029)

@@ -1,13 +1,15 @@
 /*
- *	server.h
- *	
+ *	client.h
+ *
  *	Front-end used in creating client/server pairs TCP/IP for pairing with other nodes  
  * 	Andrei-Sebastian Lungu
  */
-#include "../config.h"
+#pragma once
 
-// Main structure for creating a TCP server used in pairing and connecting two nodes.
-struct Node_Server 
+#include "../../../config.h"
+
+// Main structure for creating a TCP client used in pairing and connecting two nodes.
+struct Node_Client 
 {
 	// internet domain family (IPv4 or IPv6)
 	int domain;
@@ -15,8 +17,8 @@ struct Node_Server
 	int type;
 	// any additional protocol.
 	int protocol;
-	// interface - pair to all if server.
-	int interface;
+	// ip address of partner server.
+	unsigned int interface;
 	// port
 	int port;
 	// socket descriptor.
@@ -25,6 +27,6 @@ struct Node_Server
 	struct sockaddr_in address;
 };
 
-struct Node_Server node_server_constructor();
+struct Node_Client node_client_constructor(const char *ip, const int port);
 
-/* server.h */
+/* client.h */

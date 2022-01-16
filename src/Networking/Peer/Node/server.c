@@ -13,11 +13,11 @@ struct Node_Server node_server_constructor()
 	server.type      = NODE_SERVICE; // TCP in this case.
 	server.protocol  = SERV_PROTOCOL; // 0
 	server.interface = ANY_INTERFACE;  // 0xffffffff
-	server.port	 = NODE_PORT; // 2050
+	server.port	 = START_PORT; // 2029 
 	// Create socket and get the descriptor.
 	server.socket    = socket(server.domain, server.type, server.protocol);
 	if (server.socket == -1) {
-		fprintf(stderr, "Socket error: %s\n", strerror(errno));
+		perror("[server] Error occurred when creating a socket\n");
 		exit(1);
 	}
 	// Build server's address.
@@ -26,13 +26,13 @@ struct Node_Server node_server_constructor()
 	server.address.sin_port	       = server.port;
 	server.address.sin_addr.s_addr = server.interface; // any
 	// Bind socket to network.
-	if (bind(server.socket, (struct sockaddr *)&server.address, sizeof(struct sockaddr)) == -1) {
-		fprintf(stderr, "Binding error: %s\n", strerror(errno));
-		exit(1);
+	while(bind(server.socket, (struct sockaddr *)&server.address, sizeof(struct sockaddr)) == -1) {
+		server.address.sin_port++;
+		server.port++;
 	}
 	// Listen for connections from potential clients.
 	if (listen(server.socket, BACKLOG) == -1) {
-		fprintf(stderr, "Listening error: %s\n", strerror(errno));
+		perror("[server]Error occurred when changing socket state to listen\n");
 		exit(1);
 	}
 	return server;
